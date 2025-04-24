@@ -1,73 +1,70 @@
 package hello;
 
-
-
-import java.util.LinkedList;
-
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
+import java.util.ArrayList;
+import java.util.List;
 
-@ManagedBean(name="UserBean")
+@ManagedBean(name = "userBean")
 @RequestScoped
 public class UserBean {
+    private String fullName; // Text Input
+    private String email; // Text Input 
+    private String country; // DropDown Select 
+    private List<String> interests = new ArrayList<>(); // CheckBox
+    private String contactMethod; // Radio
 
-    private String username;
-    private boolean alive;
-    private int [] numbers = {1, 2, 3, 4, 5};
-    
-    
-    
-    public int[] getNumbers() {
-		return numbers;
-	}
-
-	public void setNumbers(int[] numbers) {
-		this.numbers = numbers;
-	}
-
-	private LinkedList<String> names = new LinkedList<String>();
-    
-    
-    public LinkedList<String> getNames() {
-		return names;
-	}
-
-	public void setNames(LinkedList<String> names) {
-		this.names = names;
-	}
-
-	private String status = "";
-    
-    public String getStatus() {
-    	return this.status;
+    public void init() {
+        contactMethod = "email"; // Default to email
     }
     
-    public void setStatus(String status) {
-    	this.status = status;
+    /** Go to another page **/
+    public String submitForm() {
+        return "user-response";
     }
     
-    public String getUsername() {
-        return username;
+    public String gotoForm() {
+    	return "user-form";
     }
 
-    public void setUsername(String username) {
-        this.username = username;
-    }
-    
-    public boolean getAlive() {
-    	return this.alive;
-    }
-    
-    public void setAlive(boolean alive) {
-    	this.alive = alive;
+    // Getters and Setters
+    public String getFullName() {
+        return fullName;
     }
 
-    public String submit() {
-        return "user-response"; // Navigation outcome
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
     }
-    
-    public String reload() {
-    	
-    	return null;
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getCountry() {
+        return country;
+    }
+
+    public void setCountry(String country) {
+        this.country = country;
+    }
+
+    public List<String> getInterests() {
+        return interests;
+    }
+
+    public void setInterests(List<String> interests) {
+        this.interests = interests;
+    }
+
+    public String getContactMethod() {
+        return contactMethod;
+    }
+
+    public void setContactMethod(String contactMethod) {
+        this.contactMethod = contactMethod;
     }
 }

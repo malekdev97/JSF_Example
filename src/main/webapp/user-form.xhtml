@@ -55,17 +55,11 @@
                             <h:outputLabel for="fullName" value="Full Name *" />
                             <h:inputText styleClass="form-control" value="#{userBean.fullName}" id="fullName" placeholder="Enter your full name" />
                         </div>
-                          <!-- Email Input -->
-                        <div class="form-group">
-                            <h:outputLabel for="email" value="Email Address *" />
-                            <h:inputText type="email" value="#{userBean.fullName}" styleClass="form-control" id="email" placeholder="Enter your email" />
-                        </div>
-                        
                         <!-- DropDown List -->
                         <div class="form-group">
                             <h:outputLabel for="country" value="Country *" />
                             <h:selectOneMenu value="#{userBean.country}" styleClass="form-control" id="country">
-                                <f:selectItem itemValue="" itemLabel="Select your country" noSelectionOption="true" />
+                                <f:selectItem itemValue="" itemLabel="#{userBean.country}" noSelectionOption="true" />
                                 <f:selectItem itemValue="US" itemLabel="United States" />
                                 <f:selectItem itemValue="CA" itemLabel="Canada" />
                                 <f:selectItem itemValue="UK" itemLabel="United Kingdom" />
@@ -97,6 +91,17 @@
 							</h:selectOneRadio>
                         </div>
                       
+                        <!-- Multiple Select Dropdown -->
+						<div class="form-group">
+    						<h:outputLabel for="skills" value="Skills (Select multiple)" />
+    						<h:selectManyListbox value="#{userBean.selectedSkills}" styleClass="form-control" id="skills" size="4">
+        						<f:selectItem itemValue="java" itemLabel="Java" />
+       							<f:selectItem itemValue="jsf" itemLabel="JSF" />
+        						<f:selectItem itemValue="html" itemLabel="HTML/CSS" />
+        						<f:selectItem itemValue="javascript" itemLabel="JavaScript" />
+        						<f:selectItem itemValue="sql" itemLabel="SQL" />
+    						</h:selectManyListbox>
+						</div>
                         
                         <!-- Form Buttons -->
                         <div class="form-group text-right">

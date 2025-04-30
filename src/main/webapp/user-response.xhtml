@@ -14,12 +14,17 @@
 	<h:form>
 		<h1>Responses</h1>
 		<div><h:outputText value="#{userBean.fullName}" /></div>
-		<div><h:outputText value="#{userBean.email}" /></div>
 		<div><h:outputText value="#{userBean.country}" /></div>
 		<div><ul>
-		<ui:repeat value="#{userBean.interests}" var="user" >
-			<li>#{user}</li>
+		<ui:repeat var="interest" value="#{userBean.interests}">
+			<li>#{interest}</li>
 		</ui:repeat>
+		</ul></div>
+		
+		<div><ul>
+			<ui:repeat var="skill" value="#{userBean.selectedSkills}">
+				<li>#{skill}</li>
+			</ui:repeat>
 		</ul></div>
 		<div><h:outputText value="#{userBean.contactMethod}" /></div>
     	<h:commandButton value="Go Back" onclick="goBack(); return false;" />

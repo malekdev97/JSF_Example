@@ -9,12 +9,20 @@ import java.util.List;
 @RequestScoped
 public class UserBean {
     private String fullName; // Text Input
-    private String email; // Text Input 
-    private String country; // DropDown Select 
+    private String country; // DropDown List
     private List<String> interests = new ArrayList<>(); // CheckBox
     private String contactMethod; // Radio
+    private List<String> selectedSkills; // Multiple Selection DropDown List
 
-    public void init() {
+    public List<String> getSelectedSkills() {
+		return selectedSkills;
+	}
+
+	public void setSelectedSkills(List<String> selectedSkills) {
+		this.selectedSkills = selectedSkills;
+	}
+
+	public void init() {
         contactMethod = "email"; // Default to email
     }
     
@@ -35,15 +43,7 @@ public class UserBean {
     public void setFullName(String fullName) {
         this.fullName = fullName;
     }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
+    
     public String getCountry() {
         return country;
     }

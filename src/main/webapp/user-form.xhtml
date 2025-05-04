@@ -37,6 +37,36 @@
         .checkbox-group, .radio-group {
             margin-top: 15px;
         }
+        /* Enhanced multi-select styles */
+        .enhanced-multiselect {
+            border: 1px solid #ced4da;
+            border-radius: 4px;
+            padding: 10px;
+            background-color: #f8f9fa;
+            margin-bottom: 15px;
+        }
+        .enhanced-multiselect label {
+            display: block;
+            padding: 8px 12px;
+            margin-bottom: 5px;
+            background-color: white;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .enhanced-multiselect label:hover {
+            background-color: #e9ecef;
+            border-color: #adb5bd;
+        }
+        .enhanced-multiselect input[type="checkbox"] {
+            margin-right: 10px;
+        }
+        .selected-count {
+            font-size: 0.9em;
+            color: #6c757d;
+            margin-bottom: 10px;
+        }
     </style>
 </h:head>
 <h:body>
@@ -84,24 +114,27 @@
                         <div class="form-group radio-group">
                             <h:outputLabel value="Preferred Contact Method *" />
                             <h:outputLabel value="Preferred Contact Method *" />
-							<h:selectOneRadio value="#{userBean.contactMethod}" styleClass="form-check" layout="pageDirection" id="contactMethod">
-    							<f:selectItem itemValue="email" itemLabel="Email" />
-   								<f:selectItem itemValue="phone" itemLabel="Phone" />
-    							<f:selectItem itemValue="sms" itemLabel="SMS" />
-							</h:selectOneRadio>
+                            <h:selectOneRadio value="#{userBean.contactMethod}" styleClass="form-check" layout="pageDirection" id="contactMethod">
+                                <f:selectItem itemValue="email" itemLabel="Email" />
+                                <f:selectItem itemValue="phone" itemLabel="Phone" />
+                                <f:selectItem itemValue="sms" itemLabel="SMS" />
+                            </h:selectOneRadio>
                         </div>
                       
-                        <!-- Multiple Select Dropdown -->
-						<div class="form-group">
-    						<h:outputLabel for="skills" value="Skills (Select multiple)" />
-    						<h:selectManyListbox value="#{userBean.selectedSkills}" styleClass="form-control" id="skills" size="4">
-        						<f:selectItem itemValue="java" itemLabel="Java" />
-       							<f:selectItem itemValue="jsf" itemLabel="JSF" />
-        						<f:selectItem itemValue="html" itemLabel="HTML/CSS" />
-        						<f:selectItem itemValue="javascript" itemLabel="JavaScript" />
-        						<f:selectItem itemValue="sql" itemLabel="SQL" />
-    						</h:selectManyListbox>
-						</div>
+                        <!-- Enhanced Multiple Select DropDown -->
+                        <div class="form-group">
+                            <h:outputLabel for="skills" value="Skills (Select multiple)" />
+                            <div class="selected-count" id="skillsCount">0 selected</div>
+                            <div class="enhanced-multiselect">
+                                <h:selectManyCheckbox value="#{userBean.selectedSkills}" layout="pageDirection" id="skills" styleClass="enhanced-checkbox">
+                                    <f:selectItem itemValue="java" itemLabel="Java" />
+                                    <f:selectItem itemValue="jsf" itemLabel="JSF" />
+                                    <f:selectItem itemValue="html" itemLabel="HTML/CSS" />
+                                    <f:selectItem itemValue="javascript" itemLabel="JavaScript" />
+                                    <f:selectItem itemValue="sql" itemLabel="SQL" />
+                                </h:selectManyCheckbox>
+                            </div>
+                        </div>
                         
                         <!-- Form Buttons -->
                         <div class="form-group text-right">
@@ -118,5 +151,51 @@
     <!-- jQuery and Bootstrap 4 JS -->
     <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Custom JavaScript for enhanced multiselect -->
+    <script>
+        $(document).ready(function() {
+            // Update selected count display
+            function updateSelectedCount() {
+                var count = $('.enhanced-multiselect input[type="checkbox"]:checked').length;
+                $('#skillsCount').text(count + ' selected');
+            }
+            
+            // Initialize count
+            updateSelectedCount();
+            
+            // Update count when checkboxes change
+            $('.enhanced-multiselect input[type="checkbox"]').change(function() {
+                updateSelectedCount();
+                
+                // Visual feedback for selection
+                if ($(this).is(':checked')) {
+                    $(this).closest('label').css({
+                        'background-color': '#e7f1ff',
+                        'border-color': '#4a90e2'
+                    });
+                } else {
+                    $(this).closest('label').css({
+                        'background-color': 'white',
+                        'border-color': '#ddd'
+                    });
+                }
+            });
+            
+            // Highlight on hover
+            $('.enhanced-multiselect label').hover(
+                function() {
+                    if (!$(this).find('input').is(':checked')) {
+                        $(this).css('background-color', '#f8f9fa');
+                    }
+                },
+                function() {
+                    if (!$(this).find('input').is(':checked')) {
+                        $(this).css('background-color', 'white');
+                    }
+                }
+            );
+        });
+    </script>
 </h:body>
 </html>

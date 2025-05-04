@@ -3,17 +3,33 @@ package hello;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import java.util.List;
+import hello.model.*;
 
 @ManagedBean(name = "userBean")
 @RequestScoped
 public class UserBean {
-    private String fullName; // Text Input
+	
+	private List<Student> usersList = new ArrayList<Student>(Arrays.asList(new Student(100, "Malek"), new Student(200, "Fahad")));
+	
+	public List<Student> getUsersList() {
+		return usersList;
+	}
+
+	public void setUsersList(List<Student> usersList) {
+		this.usersList = usersList;
+	}
+
+	private String fullName; // Text Input
     private String country; // DropDown List
     private List<String> interests = new ArrayList<>(); // CheckBox
     private String contactMethod; // Radio
     private List<String> selectedSkills; // Multiple Selection DropDown List
-
+    
     public List<String> getSelectedSkills() {
 		return selectedSkills;
 	}

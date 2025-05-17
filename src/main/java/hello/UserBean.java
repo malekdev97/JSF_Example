@@ -1,86 +1,95 @@
 package hello;
 
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.RequestScoped;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Map;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
+import java.io.Serializable;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+
+import javax.annotation.PostConstruct;
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ViewScoped;
 import hello.model.*;
 
-@ManagedBean(name = "userBean")
-@RequestScoped
-public class UserBean {
-	
-	private List<Student> usersList = new ArrayList<Student>(Arrays.asList(new Student(100, "Malek"), new Student(200, "Fahad")));
-	
-	public List<Student> getUsersList() {
-		return usersList;
-	}
-
-	public void setUsersList(List<Student> usersList) {
-		this.usersList = usersList;
-	}
-
-	private String fullName; // Text Input
-    private String country; // DropDown List
-    private List<String> interests = new ArrayList<>(); // CheckBox
-    private String contactMethod; // Radio
-    private List<String> selectedSkills; // Multiple Selection DropDown List
+@ManagedBean
+@ViewScoped
+public class UserBean implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	private List<User> allUsers;
+    private List<User> paginatedUsers;
+    private int currentPage = 1;
+    private int pageSize = 10;
+    private int totalPages;
+    private int totalUsers;
     
-    public List<String> getSelectedSkills() {
-		return selectedSkills;
-	}
-
-	public void setSelectedSkills(List<String> selectedSkills) {
-		this.selectedSkills = selectedSkills;
-	}
-
-	public void init() {
-        contactMethod = "email"; // Default to email
+    @PostConstruct
+    public void init() {
+        // Load all users
+        totalUsers = allUsers.size();
+        totalPages = (int) Math.ceil((double) totalUsers / pageSize);
+        updatePaginatedUsers();
     }
     
-    /** Go to another page **/
-    public String submitForm() {
-        return "user-response";
+    private void updatePaginatedUsers() {
+        int first = (currentPage - 1) * pageSize;
+        int last = Math.min(first + pageSize, totalUsers);
+        setPaginatedUsers(allUsers.subList(first, last));
     }
     
-    public String gotoForm() {
-    	return "user-form";
-    }
-
-    // Getters and Setters
-    public String getFullName() {
-        return fullName;
-    }
-
-    public void setFullName(String fullName) {
-        this.fullName = fullName;
+    // Navigation methods
+    public void nextPage() {
+        if (currentPage < totalPages) {
+            currentPage++;
+            updatePaginatedUsers();
+        }
     }
     
-    public String getCountry() {
-        return country;
+    public void previousPage() {
+        if (currentPage > 1) {
+            currentPage--;
+            updatePaginatedUsers();
+        }
+    }
+    
+    public void firstPage() {
+        currentPage = 1;
+        updatePaginatedUsers();
+    }
+    
+    public void lastPage() {
+        currentPage = totalPages;
+        updatePaginatedUsers();
+    }
+    
+    public void goToPage(int page) {
+        currentPage = page;
+        updatePaginatedUsers();
+    }
+    
+    // Getters for the view
+    public List<Integer> getPages() {
+        return IntStream.rangeClosed(1, totalPages)
+                       .boxed()
+                       .collect(Collectors.toList());
+    }
+    
+    public int getFirstItem() {
+        return (currentPage - 1) * pageSize;
+    }
+    
+    public int getLastItem() {
+        return Math.min(getFirstItem() + pageSize, totalUsers);
     }
 
-    public void setCountry(String country) {
-        this.country = country;
-    }
+	public List<User> getPaginatedUsers() {
+		return paginatedUsers;
+	}
 
-    public List<String> getInterests() {
-        return interests;
-    }
-
-    public void setInterests(List<String> interests) {
-        this.interests = interests;
-    }
-
-    public String getContactMethod() {
-        return contactMethod;
-    }
-
-    public void setContactMethod(String contactMethod) {
-        this.contactMethod = contactMethod;
-    }
+	public void setPaginatedUsers(List<User> paginatedUsers) {
+		this.paginatedUsers = paginatedUsers;
+	}
+    
+    // Other getters and setters...
 }

@@ -27,10 +27,12 @@
 			</ui:repeat>
 		</ul></div>
 		<div><h:outputText value="#{userBean.contactMethod}" /></div>
-    	<h:commandButton value="Go Back" onclick="goBack(); return false;" />
+    	<h:commandLink onclick="goBack(); " >
+    	go back</h:commandLink>
 		
 	</h:form>
 	<script>
+	
     function goBack() {
         const previousUrl = getPreviousUrl();
         if (previousUrl) {
@@ -47,6 +49,7 @@
         }
         return previousUrl;
     }
+    
 	</script>
 </h:body>
 </html>

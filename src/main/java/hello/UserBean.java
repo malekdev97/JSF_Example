@@ -24,12 +24,28 @@ public class UserBean {
 		this.usersList = usersList;
 	}
 
-	private String fullName; // Text Input
+	private String email; // Text Input
     private String country; // DropDown List
     private List<String> interests = new ArrayList<>(); // CheckBox
     private String contactMethod; // Radio
     private List<String> selectedSkills; // Multiple Selection DropDown List
+
+	public void init() {
+        contactMethod = "email"; // Default to email
+    }
     
+    //==== Views ====//
+	public String formView() {
+    	return "user-form";
+    }
+    
+    
+    //==== Actions ====//
+    public String submitForm() {
+        return "user-response";
+    }
+
+    //==== Getters and Setters ====//
     public List<String> getSelectedSkills() {
 		return selectedSkills;
 	}
@@ -37,27 +53,12 @@ public class UserBean {
 	public void setSelectedSkills(List<String> selectedSkills) {
 		this.selectedSkills = selectedSkills;
 	}
-
-	public void init() {
-        contactMethod = "email"; // Default to email
-    }
-    
-    /** Go to another page **/
-    public String submitForm() {
-        return "user-response";
-    }
-    
-    public String gotoForm() {
-    	return "user-form";
+    public String getEmail() {
+        return email;
     }
 
-    // Getters and Setters
-    public String getFullName() {
-        return fullName;
-    }
-
-    public void setFullName(String fullName) {
-        this.fullName = fullName;
+    public void setEmail(String email) {
+        this.email = email;
     }
     
     public String getCountry() {

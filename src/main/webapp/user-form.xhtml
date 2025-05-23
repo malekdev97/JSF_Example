@@ -82,8 +82,8 @@
                     <h:form id="registrationForm">
                         <!-- Text Input -->
                         <div class="form-group">
-                            <h:outputLabel for="fullName" value="Full Name *" />
-                            <h:inputText styleClass="form-control" value="#{userBean.fullName}" id="fullName" placeholder="Enter your full name" />
+                            <h:outputLabel for="email" value="Email *" />
+                            <h:inputText styleClass="form-control" value="#{userBean.email}" id="email" placeholder="Enter your Email" />
                         </div>
                         <!-- DropDown List -->
                         <div class="form-group">
@@ -99,7 +99,7 @@
                             </h:selectOneMenu>
                         </div>
                         
-                        <!-- Multiple Checkboxes -->
+                        <!-- Multiple CheckBoxes -->
                         <div class="form-group checkbox-group">
                             <h:outputLabel value="Interests (Select all that apply)" />
                             <h:selectManyCheckbox value="#{userBean.interests}" styleClass="form-check" layout="pageDirection" id="interests">
@@ -117,7 +117,6 @@
                             <h:selectOneRadio value="#{userBean.contactMethod}" styleClass="form-check" layout="pageDirection" id="contactMethod">
                                 <f:selectItem itemValue="email" itemLabel="Email" />
                                 <f:selectItem itemValue="phone" itemLabel="Phone" />
-                                <f:selectItem itemValue="sms" itemLabel="SMS" />
                             </h:selectOneRadio>
                         </div>
                       
@@ -127,11 +126,11 @@
                             <div class="selected-count" id="skillsCount">0 selected</div>
                             <div class="enhanced-multiselect">
                                 <h:selectManyCheckbox value="#{userBean.selectedSkills}" layout="pageDirection" id="skills" styleClass="enhanced-checkbox">
-                                    <f:selectItem itemValue="java" itemLabel="Java" />
-                                    <f:selectItem itemValue="jsf" itemLabel="JSF" />
-                                    <f:selectItem itemValue="html" itemLabel="HTML/CSS" />
-                                    <f:selectItem itemValue="javascript" itemLabel="JavaScript" />
-                                    <f:selectItem itemValue="sql" itemLabel="SQL" />
+                                    <f:selectItem itemValue="java"  />
+                                    <f:selectItem itemValue="jsf" />
+                                    <f:selectItem itemValue="html" />
+                                    <f:selectItem itemValue="javascript" />
+                                    <f:selectItem itemValue="sql" />
                                 </h:selectManyCheckbox>
                             </div>
                         </div>

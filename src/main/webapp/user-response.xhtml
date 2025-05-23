@@ -13,7 +13,7 @@
 <h:body>
 	<h:form>
 		<h1>Responses</h1>
-		<div><h:outputText value="#{userBean.fullName}" /></div>
+		<div><h:outputText value="#{userBean.email}" /></div>
 		<div><h:outputText value="#{userBean.country}" /></div>
 		<div><ul>
 		<ui:repeat var="interest" value="#{userBean.interests}">
@@ -28,7 +28,6 @@
 		</ul></div>
 		<div><h:outputText value="#{userBean.contactMethod}" /></div>
     	<h:commandButton value="Go Back" onclick="goBack(); return false;" />
-		
 	</h:form>
 	<script>
     function goBack() {

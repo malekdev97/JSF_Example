@@ -5,17 +5,25 @@ import java.io.Serializable;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 
-@ManagedBean(name = "userData", eager = true)
+import javax.faces.bean.ManagedBean;
+import javax.faces.context.FacesContext;
+
+
+@ManagedBean(name = "userBean")
 @SessionScoped
 public class UserBean implements Serializable {
-   private static final long serialVersionUID = 1L;
-   public String[] data = {"1","2","3"};
+    private String name;
 
-   public String[] getData() {
-      return data;
-   }
+    public void submit() {
+        System.out.println("Submitted: " + name);
+        // Do your backend logic
+    }
 
-   public void setData(String[] data) {
-      this.data = data;
-   }
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
 }

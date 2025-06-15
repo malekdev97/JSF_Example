@@ -1,69 +1,30 @@
-<!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://java.sun.com/jsf/html">
-<h:head>
-    <title>JSF Bootstrap 4 Confirm Modal</title>
+<?xml version = "1.0" encoding = "UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
-    <!-- Bootstrap 4 CSS -->
-    <link rel="stylesheet"
-          href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" />
-
-    <style>
-        /* Optional: Custom style */
-        .modal-confirm {
-            text-align: center;
-        }
-    </style>
-</h:head>
-
-<h:body>
-    <h:form id="myForm" styleClass="container mt-5">
-
-        <h2>Submit with Confirmation</h2>
-
-        <!-- Sample input field -->
-        <div class="form-group">
-            <label for="nameInput">Name:</label>
-            <h:inputText id="nameInput" value="#{userBean.name}" styleClass="form-control" />
-        </div>
-
-        <!-- Trigger modal button -->
-        <button type="button" class="btn btn-primary" onclick="showConfirmModal()">Submit</button>
-
-        <!-- Modal -->
-        <div class="modal fade" id="confirmModal" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content modal-confirm">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="modalLabel">Confirm Submission</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        Are you sure you want to submit the form?
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-
-                        <!-- JSF submit button inside modal -->
-                        <h:commandButton value="Yes, Submit" action="#{userBean.submit}" styleClass="btn btn-success" />
-                    </div>
-                </div>
-            </div>
-        </div>
-
-    </h:form>
-
-    <!-- Bootstrap 4 JS (jQuery, Popper.js, Bootstrap JS) -->
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-
-    <!-- Vanilla JS to show modal -->
-    <script>
-        function showConfirmModal() {
-            $('#confirmModal').modal('show');
-        }
-    </script>
-</h:body>
-</html>
+<html xmlns = "http://www.w3.org/1999/xhtml"
+   xmlns:f = "http://java.sun.com/jsf/core"    
+   xmlns:h = "http://java.sun.com/jsf/html">
+   
+   <head>
+      <title>JSF Tutorial!</title>
+   </head>
+   
+   <h:body>
+      <h2>h:selectManyListbox example</h2>
+      <hr />
+      
+      <h:form>
+         <h3>List Box</h3> 
+         <h:selectManyListbox value = "#{UserBean.data}">
+            <f:selectItem itemValue = "1" itemLabel = "Item 1" />
+            <f:selectItem itemValue = "2" itemLabel = "Item 2" />
+            <f:selectItem itemValue = "3" itemLabel = "Item 3" />
+            <f:selectItem itemValue = "4" itemLabel = "Item 4" />
+            <f:selectItem itemValue = "5" itemLabel = "Item 5" />
+         </h:selectManyListbox>
+         <h:commandButton value = "Submit" action ="user-response" />
+      </h:form> 		
+   
+   </h:body>
+</html> 

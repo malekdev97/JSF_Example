@@ -1,29 +1,46 @@
 package hello;
 
+
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ViewScoped;
 import java.io.Serializable;
 
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.SessionScoped;
-
-import javax.faces.bean.ManagedBean;
-import javax.faces.context.FacesContext;
-
-
-@ManagedBean(name = "userBean")
-@SessionScoped
+@ManagedBean(name = "myBean")
+@ViewScoped
 public class UserBean implements Serializable {
-    private String name;
 
-    public void submit() {
-        System.out.println("Submitted: " + name);
-        // Do your backend logic
+    private static final long serialVersionUID = 1L;
+
+    private boolean checkboxA;
+    private boolean checkboxB;
+    private String inputText;
+
+    public boolean isCheckboxA() {
+        return checkboxA;
     }
 
-    public String getName() {
-        return name;
+    public void setCheckboxA(boolean checkboxA) {
+        this.checkboxA = checkboxA;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public boolean isCheckboxB() {
+        return checkboxB;
+    }
+
+    public void setCheckboxB(boolean checkboxB) {
+        this.checkboxB = checkboxB;
+    }
+
+    public String getInputText() {
+        return inputText;
+    }
+
+    public void setInputText(String inputText) {
+        this.inputText = inputText;
+    }
+
+    public String submit() {
+        System.out.println("A: " + checkboxA + ", B: " + checkboxB + ", Input: " + inputText);
+        return null;
     }
 }

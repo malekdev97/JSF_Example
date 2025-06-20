@@ -9,28 +9,27 @@ import java.util.*;
 @SessionScoped
 public class MyBean implements Serializable {
     private static final long serialVersionUID = 1L;
-    private List<String> names = Arrays.asList("a", "b", "c", "d");
+    private List<String> names = Arrays.asList("A", "B", "C", "D");
     private List<String> countries = Arrays.asList("USA", "SA", "UK", "RU");
-    private List<String> data = new ArrayList<>();
+    private List<List<String>> data = new ArrayList<>();
     
-    // Initialize the map directly
-    private Map<String, Boolean> selectedNames = new HashMap<String, Boolean>() {{
-        put("a", false);
-        put("b", false);
-        put("c", false);
-        put("d", false);
-    }};
+    // Map to store selected combinations
+    private Map<String, Map<String, Boolean>> selections = new HashMap<>();
 
-    // Alternative: Initialize in getter
-    public Map<String, Boolean> getSelectedNames() {
-        if (selectedNames.isEmpty()) {
+    // Initialize the selections map
+    public Map<String, Map<String, Boolean>> getSelections() {
+        if (selections.isEmpty()) {
             for (String name : names) {
-                selectedNames.put(name, false);
+                Map<String, Boolean> countryMap = new HashMap<>();
+                for (String country : countries) {
+                    countryMap.put(country, false);
+                }
+                selections.put(name, countryMap);
             }
         }
-        return selectedNames;
+        return selections;
     }
-    // Add getter and setter for selectedNames
+
     public List<String> getNames() {
         return names;
     }
@@ -40,30 +39,29 @@ public class MyBean implements Serializable {
     }
     
     public List<String> getCountries() {
-		return countries;
-	}
+        return countries;
+    }
 
-	public void setCountries(List<String> countries) {
-		this.countries = countries;
-	}
+    public void setCountries(List<String> countries) {
+        this.countries = countries;
+    }
 
-	public void setSelectedNames(Map<String, Boolean> selectedNames) {
-		this.selectedNames = selectedNames;
-	}
-
-	public List<String> getData() {
+    public List<List<String>> getData() {
         return data;
     }
 
-    public void setData(List<String> data) {
+    public void setData(List<List<String>> data) {
         this.data = data;
     }
 
     public String submit() {
         data.clear();
-        for (Map.Entry<String, Boolean> entry : selectedNames.entrySet()) {
-            if (entry.getValue()) {
-                data.add(entry.getKey());
+        for (Map.Entry<String, Map<String, Boolean>> nameEntry : selections.entrySet()) {
+            String name = nameEntry.getKey();
+            for (Map.Entry<String, Boolean> countryEntry : nameEntry.getValue().entrySet()) {
+                if (countryEntry.getValue()) {
+                    data.add(Arrays.asList(name, countryEntry.getKey()));
+                }
             }
         }
         return "result?faces-redirect=true";

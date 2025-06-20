@@ -3,12 +3,12 @@
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
 <h:head>
-    <title>Selected Names</title>
+    <title>Selected Names and Countries</title>
 </h:head>
 <h:body>
-    <h3>Selected Names:</h3>
-    <ui:repeat value="#{MyBean.data}" var="name">
-        <div>#{name}</div>
+    <h3>Selected Combinations:</h3>
+    <ui:repeat value="#{MyBean.data}" var="pair">
+        <div>#{pair[0]} - #{pair[1]}</div>
     </ui:repeat>
     
     <h:link value="Back to Form" outcome="form" />

@@ -17,11 +17,24 @@
       <h:form>
          <h3>List Box</h3> 
          <h:selectManyListbox value = "#{UserBean.data}">
-            <f:selectItem itemValue = "1" itemLabel = "Item 1" />
-            <f:selectItem itemValue = "2" itemLabel = "Item 2" />
-            <f:selectItem itemValue = "3" itemLabel = "Item 3" />
-            <f:selectItem itemValue = "4" itemLabel = "Item 4" />
-            <f:selectItem itemValue = "5" itemLabel = "Item 5" />
+            <f:selectItem itemValue = "1" itemLabel = "Item 1" >
+            	<h:selectManyListbox value = "#{UserBean.data}">
+            		<f:selectItem itemValue = "A" itemLabel = "Item A" />
+            		<f:selectItem itemValue = "B" itemLabel = "Item B" />
+         		</h:selectManyListbox>
+            </f:selectItem>
+            <f:selectItem itemValue = "2" itemLabel = "Item 2" >
+            	<h:selectManyListbox value = "#{UserBean.data}">
+            		<f:selectItem itemValue = "A" itemLabel = "Item A" />
+            		<f:selectItem itemValue = "B" itemLabel = "Item B" />
+         		</h:selectManyListbox>
+            </f:selectItem>
+            <f:selectItem itemValue = "3" itemLabel = "Item 3" >
+            	<h:selectManyListbox value = "#{UserBean.data}">
+            		<f:selectItem itemValue = "A" itemLabel = "Item A" />
+            		<f:selectItem itemValue = "B" itemLabel = "Item B" />
+         		</h:selectManyListbox>
+            </f:selectItem>
          </h:selectManyListbox>
          <h:commandButton value = "Submit" action ="user-response" />
       </h:form> 		

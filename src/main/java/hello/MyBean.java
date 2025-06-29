@@ -10,60 +10,81 @@ import java.util.*;
 public class MyBean implements Serializable {
     private static final long serialVersionUID = 1L;
     private List<String> names = Arrays.asList("A", "B", "C", "D");
-    private List<String> countries = Arrays.asList("USA", "SA", "UK", "RU");
+    private List<String> jobs = Arrays.asList("HR", "Sales", "unemployee");
+    private Boolean hasAJob = false; // unemployee
     private List<List<String>> data = new ArrayList<>();
+    private Map<String, String> selections = new HashMap();
     
-    // Map to store selected combinations
-    private Map<String, Map<String, Boolean>> selections = new HashMap<>();
-
-    // Initialize the selections map
-    public Map<String, Map<String, Boolean>> getSelections() {
-        if (selections.isEmpty()) {
-            for (String name : names) {
-                Map<String, Boolean> countryMap = new HashMap<>();
-                for (String country : countries) {
-                    countryMap.put(country, false);
-                }
-                selections.put(name, countryMap);
-            }
-        }
-        return selections;
-    }
-
-    public List<String> getNames() {
-        return names;
-    }
-
-    public void setNames(List<String> names) {
-        this.names = names;
+    public MyBean() {
+    	for(String name : names) {
+    		for(String job : jobs) {
+    			selections.put(name, job);
+    		}
+    	}
     }
     
-    public List<String> getCountries() {
-        return countries;
-    }
+	public List<String> getNames() {
+		return names;
+	}
 
-    public void setCountries(List<String> countries) {
-        this.countries = countries;
-    }
 
-    public List<List<String>> getData() {
-        return data;
-    }
 
-    public void setData(List<List<String>> data) {
-        this.data = data;
-    }
+	public void setNames(List<String> names) {
+		this.names = names;
+	}
 
-    public String submit() {
+
+
+	public List<String> getJobs() {
+		return jobs;
+	}
+
+
+
+	public void setJobs(List<String> jobs) {
+		this.jobs = jobs;
+	}
+
+
+
+	public Boolean getHasAJob() {
+		return hasAJob;
+	}
+
+
+
+	public void setHasAJob(Boolean hasAJob) {
+		this.hasAJob = hasAJob;
+	}
+
+
+
+	public List<List<String>> getData() {
+		return data;
+	}
+
+
+
+	public void setData(List<List<String>> data) {
+		this.data = data;
+	}
+
+
+
+	public Map<String, String> getSelections() {
+		return selections;
+	}
+
+
+
+	public void setSelections(Map<String, String> selections) {
+		this.selections = selections;
+	}
+
+
+	public String submit() {
+		
         data.clear();
-        for (Map.Entry<String, Map<String, Boolean>> nameEntry : selections.entrySet()) {
-            String name = nameEntry.getKey();
-            for (Map.Entry<String, Boolean> countryEntry : nameEntry.getValue().entrySet()) {
-                if (countryEntry.getValue()) {
-                    data.add(Arrays.asList(name, countryEntry.getKey()));
-                }
-            }
-        }
         return "result?faces-redirect=true";
     }
 }

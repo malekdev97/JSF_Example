@@ -5,21 +5,26 @@
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
 <h:head>
     <title>Test</title>
-</h:head>
+    <script type="text/javascript">
+    </script>
+</h:head> 
 <h:body>
     <h:form>
+    	<h:selectOneRadio value="#{MyBean.hasAJob}" >
+    		<f:selectItem itemValue="#{true}" itemLabel="Yes" />
+    		<f:selectItem itemValue="#{false}" itemLabel="No" />
+    	</h:selectOneRadio>
         <ui:repeat value="#{MyBean.names}" var="name">
             <div>
                 <h:outputLabel value="#{name}" />
-                <ui:repeat value="#{MyBean.countries}" var="country">
-                    <span>
-                        <h:selectBooleanCheckbox value="#{MyBean.selections[name][country]}" />
-                        <h:outputLabel value="#{country}" />
-                    </span>
+                <h:selectBooleanCheckbox value="#{MyBean.selections[name][jobs]}" />
+                <h:selectOneRadio value="#{MyBean.hasAJob}" >
+                <ui:repeat value="#{MyBean.jobs}" var="job">    
+    				<f:selectItem itemValue="#{true}" itemLabel="job" />
                 </ui:repeat>
+                </h:selectOneRadio>
             </div>
         </ui:repeat>
-    
         <h:commandButton value="Submit" action="#{MyBean.submit}" />
     </h:form>
 </h:body>

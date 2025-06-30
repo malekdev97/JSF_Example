@@ -28,13 +28,14 @@
         <ui:repeat value="#{formBean.availableNames}" var="name">
             <h:panelGroup id="row_#{name}" layout="block" styleClass="row">
                 <h:selectBooleanCheckbox value="#{formBean.selectedMap[name]}">
-                    <f:ajax execute="@this" render="row_#{name}" />
+                    <f:ajax render="group-radio" />
                 </h:selectBooleanCheckbox>
 
                 <h:outputLabel value="#{name}" styleClass="label" />
 
-                <h:panelGroup rendered="#{formBean.selectedMap[name]}" styleClass="radios">
-                    <h:selectOneRadio value="#{formBean.nameToJob[name]}" required="true">
+                <h:panelGroup id="group-radio" styleClass="radios">
+                    <h:selectOneRadio rendered="#{formBean.selectedMap[name]}"
+                    	value="#{formBean.nameToJob[name]}" required="true">
                         <f:selectItems value="#{formBean.availableJobs}" var="job"
                                      itemLabel="#{job}" itemValue="#{job}" />
                     </h:selectOneRadio>

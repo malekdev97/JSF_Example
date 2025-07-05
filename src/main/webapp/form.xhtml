@@ -1,50 +1,116 @@
-<!DOCTYPE html>
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:f="http://xmlns.jcp.org/jsf/core"
-      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
 <h:head>
-    <title>Assign Jobs</title>
+    <title>Delete Confirmation</title>
     <style>
-        .row {
-            display: flex;
-            align-items: center;
-            margin-bottom: 12px;
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0,0,0,0.5);
+            opacity: 0;
+            transition: opacity 0.3s;
         }
-        .label {
-            margin-left: 8px;
-            margin-right: 20px;
-            width: 80px;
+        .modal.show { opacity: 1; }
+        
+        .modal-content {
+            background: white;
+            width: 300px;
+            margin: 100px auto;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            transform: scale(0.9);
+            transition: transform 0.3s;
         }
-        .radios {
-            margin-left: 16px;
+        .modal.show .modal-content { transform: scale(1); }
+        
+        .modal-buttons { text-align: right; margin-top: 20px; }
+        button { 
+            padding: 8px 16px; 
+            margin-left: 10px; 
+            border: none; 
+            border-radius: 4px; 
+            cursor: pointer;
+            transition: background 0.2s;
         }
+        .confirm-btn { background: #ff4444; color: white; }
+        .confirm-btn:hover { background: #cc0000; }
     </style>
 </h:head>
 <h:body>
-    <h:form>
-        <h2>Select People and Assign Jobs</h2>
-
-        <ui:repeat value="#{formBean.availableNames}" var="name">
-            <h:panelGroup id="row_#{name}" layout="block" styleClass="row">
-                <h:selectBooleanCheckbox value="#{formBean.selectedMap[name]}">
-                    <f:ajax render="group-radio" />
-                </h:selectBooleanCheckbox>
-
-                <h:outputLabel value="#{name}" styleClass="label" />
-
-                <h:panelGroup id="group-radio" styleClass="radios">
-                    <h:selectOneRadio rendered="#{formBean.selectedMap[name]}"
-                    	value="#{formBean.nameToJob[name]}" required="true">
-                        <f:selectItems value="#{formBean.availableJobs}" var="job"
-                                     itemLabel="#{job}" itemValue="#{job}" />
-                    </h:selectOneRadio>
-                </h:panelGroup>
-            </h:panelGroup>
+    <h:form id="taskForm">
+        <ui:repeat value="#{formBean.tasks}" var="task">
+            <h:commandButton value="Delete #{task}" 
+                             onclick="showModal('#{task}'); return false;"
+                             style="background:#ff4444;color:white;border:none;padding:8px 16px;border-radius:4px;cursor:pointer;margin:5px;">
+                <f:param name="selectedTask" value="#{task}" />
+            </h:commandButton>
         </ui:repeat>
-
-        <br/>
-        <h:commandButton value="Submit" action="#{formBean.submit}" />
+        
+        <!-- Hidden button for actual deletion -->
+        <h:commandButton id="hiddenDeleteBtn" 
+                         action="#{formBean.submit}"
+                         style="display:none;">
+            <f:param name="selectedTask" value="#{param.selectedTask}" />
+        </h:commandButton>
     </h:form>
+
+    <div id="modal" class="modal" onclick="hideModal()">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <h3>Confirm Delete</h3>
+            <p>Are you sure you want to delete this task?</p>
+            <div class="modal-buttons">
+                <button onclick="hideModal()">Cancel</button>
+                <button class="confirm-btn" onclick="deleteTask()">Delete</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        //<![CDATA[
+        function showModal(task) {
+            // Set the selected task in a hidden input
+            var modal = document.getElementById('modal');
+            modal.dataset.task = task;
+            modal.style.display = 'block';
+            setTimeout(function() { modal.classList.add('show'); }, 10);
+        }
+        
+        function hideModal() {
+            var modal = document.getElementById('modal');
+            modal.classList.remove('show');
+            setTimeout(function() { modal.style.display = 'none'; }, 300);
+        }
+        
+        function deleteTask() {
+            // Get the task from modal data attribute
+            var modal = document.getElementById('modal');
+            var task = modal.dataset.task;
+            
+            // Set the hidden parameter
+            var hiddenButton = document.querySelector('[id$="hiddenDeleteBtn"]');
+            if (hiddenButton) {
+                // Find the parameter input and set its value
+                hiddenButton.setAttribute('data-selected-task', task); // Store the task in a data attribute
+                hiddenButton.click(); // Trigger the hidden button
+            }
+            hideModal();
+        }
+        
+        // Close with Escape key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape' && document.getElementById('modal').style.display === 'block') {
+                hideModal();
+            }
+        });
+        //]]>
+    </script>
 </h:body>
 </html>

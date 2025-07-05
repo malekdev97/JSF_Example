@@ -2,52 +2,40 @@ package hello;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
+import javax.faces.context.FacesContext;
 import java.io.Serializable;
-import java.util.*;
+import java.util.Arrays;
+import java.util.List;
 
 @ManagedBean(name = "formBean")
 @SessionScoped
 public class MyBean implements Serializable {
 
-    private final List<String> availableNames = Arrays.asList("Alice", "Bob", "Charlie");
-    private final List<String> availableJobs = Arrays.asList("Sales", "HR", "Unemployed");
-    private final Map<String, Boolean> selectedMap = new LinkedHashMap<>();
-    private final Map<String, String> nameToJob = new LinkedHashMap<>();
+    private final List<String> tasks = Arrays.asList("Eat", "Code", "Sleep");
+    private String selectedData;
 
-    public MyBean() {
-        for (String name : availableNames) {
-            selectedMap.put(name, false);
-            nameToJob.put(name, "Unemployed"); // Initialize with default job
-        }
+    public String getSelectedData() {
+        // First check request parameter, then fall back to field
+        FacesContext context = FacesContext.getCurrentInstance();
+        String paramValue = context.getExternalContext().getRequestParameterMap().get("selectedTask");
+        return paramValue != null ? paramValue : selectedData;
     }
 
-    public List<String> getAvailableNames() {
-        return availableNames;
+    public void setSelectedData(String selectedData) {
+        this.selectedData = selectedData;
     }
-
-    public List<String> getAvailableJobs() {
-        return availableJobs;
-    }
-
-    public Map<String, Boolean> getSelectedMap() {
-        return selectedMap;
-    }
-
-    public Map<String, String> getNameToJob() {
-        return nameToJob;
-    }
-
-    public List<String> getAssignedNames() {
-        List<String> selected = new ArrayList<>();
-        for (Map.Entry<String, Boolean> entry : selectedMap.entrySet()) {
-            if (Boolean.TRUE.equals(entry.getValue())) {
-                selected.add(entry.getKey());
-            }
-        }
-        return selected;
+    
+    public List<String> getTasks() {
+        return tasks;
     }
 
     public String submit() {
+        // Ensure selectedData is set from parameter
+        FacesContext context = FacesContext.getCurrentInstance();
+        String paramValue = context.getExternalContext().getRequestParameterMap().get("selectedTask");
+        if (paramValue != null) {
+            this.selectedData = paramValue;
+        }
         return "result.xhtml?faces-redirect=true";
     }
 }

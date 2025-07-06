@@ -1,116 +1,172 @@
-<?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
-"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-      xmlns:f="http://xmlns.jcp.org/jsf/core">
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
 <h:head>
-    <title>Delete Confirmation</title>
-    <style>
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            background: rgba(0,0,0,0.5);
-            opacity: 0;
-            transition: opacity 0.3s;
+    <title>JSF Pagination Without @PostConstruct</title>
+    <style type="text/css">
+        .pagination-container {
+            margin: 20px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
-        .modal.show { opacity: 1; }
         
-        .modal-content {
-            background: white;
-            width: 300px;
-            margin: 100px auto;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
-            transform: scale(0.9);
-            transition: transform 0.3s;
+        .pagination {
+            display: flex;
+            list-style: none;
+            padding: 0;
+            margin: 0;
         }
-        .modal.show .modal-content { transform: scale(1); }
         
-        .modal-buttons { text-align: right; margin-top: 20px; }
-        button { 
-            padding: 8px 16px; 
-            margin-left: 10px; 
-            border: none; 
-            border-radius: 4px; 
-            cursor: pointer;
-            transition: background 0.2s;
+        .pagination li {
+            margin: 0 3px;
         }
-        .confirm-btn { background: #ff4444; color: white; }
-        .confirm-btn:hover { background: #cc0000; }
+        
+        .pagination li a {
+            padding: 6px 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            text-decoration: none;
+            color: #337ab7;
+            display: block;
+        }
+        
+        .pagination li.active a {
+            background-color: #337ab7;
+            color: white;
+            border-color: #337ab7;
+        }
+        
+        .pagination li.disabled a {
+            color: #ccc;
+            cursor: not-allowed;
+            pointer-events: none;
+        }
+        
+        .pagination li a:hover:not(.active) {
+            background-color: #f5f5f5;
+        }
+        
+        .page-size-selector {
+            display: flex;
+            align-items: center;
+        }
+        
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        
+        .data-table th, .data-table td {
+            padding: 8px;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+        
+        .data-table th {
+            background-color: #f5f5f5;
+        }
+        
+        .data-table tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        
+        .page-info {
+            text-align: center;
+            margin-top: 10px;
+            font-style: italic;
+        }
     </style>
 </h:head>
-<h:body>
-    <h:form id="taskForm">
-        <ui:repeat value="#{formBean.tasks}" var="task">
-            <h:commandButton value="Delete #{task}" 
-                             onclick="showModal('#{task}'); return false;"
-                             style="background:#ff4444;color:white;border:none;padding:8px 16px;border-radius:4px;cursor:pointer;margin:5px;">
-                <f:param name="selectedTask" value="#{task}" />
-            </h:commandButton>
-        </ui:repeat>
-        
-        <!-- Hidden button for actual deletion -->
-        <h:commandButton id="hiddenDeleteBtn" 
-                         action="#{formBean.submit}"
-                         style="display:none;">
-            <f:param name="selectedTask" value="#{param.selectedTask}" />
-        </h:commandButton>
-    </h:form>
 
-    <div id="modal" class="modal" onclick="hideModal()">
-        <div class="modal-content" onclick="event.stopPropagation()">
-            <h3>Confirm Delete</h3>
-            <p>Are you sure you want to delete this task?</p>
-            <div class="modal-buttons">
-                <button onclick="hideModal()">Cancel</button>
-                <button class="confirm-btn" onclick="deleteTask()">Delete</button>
+<h:body>
+    <h:form id="form">
+        <h2>Enhanced Pagination Without @PostConstruct</h2>
+        
+        <!-- Data Table -->
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                </tr>
+            </thead>
+            <tbody>
+                <ui:repeat value="#{myBean.currentPageData}" var="item">
+                    <tr>
+                        <td>#{item.id}</td>
+                        <td>#{item.name}</td>
+                    </tr>
+                </ui:repeat>
+            </tbody>
+        </table>
+        
+        <!-- Pagination Controls -->
+        <div class="pagination-container">
+            <ul class="pagination">
+                <!-- First Page -->
+                <li class="#{myBean.currentPage eq 1 ? 'disabled' : ''}">
+                    <h:commandLink action="#{myBean.firstPage}" value="« First">
+                        <f:ajax execute="@this" render="form" />
+                    </h:commandLink>
+                </li>
+                
+                <!-- Previous Page -->
+                <li class="#{myBean.currentPage eq 1 ? 'disabled' : ''}">
+                    <h:commandLink action="#{myBean.previousPage}" value="‹ Prev">
+                        <f:ajax execute="@this" render="form" />
+                    </h:commandLink>
+                </li>
+                
+                <!-- Page Numbers -->
+                <ui:repeat value="#{myBean.pages}" var="page">
+                    <li class="#{myBean.currentPage eq page ? 'active' : ''}">
+                        <h:commandLink value="#{page}" action="#{myBean.goToPage(page)}">
+                            <f:ajax execute="@this" render="form" />
+                        </h:commandLink>
+                    </li>
+                </ui:repeat>
+                
+                <!-- Next Page -->
+                <li class="#{myBean.currentPage eq myBean.totalPages ? 'disabled' : ''}">
+                    <h:commandLink action="#{myBean.nextPage}" value="Next ›">
+                        <f:ajax execute="@this" render="form" />
+                    </h:commandLink>
+                </li>
+                
+                <!-- Last Page -->
+                <li class="#{myBean.currentPage eq myBean.totalPages ? 'disabled' : ''}">
+                    <h:commandLink action="#{myBean.lastPage}" value="Last »">
+                        <f:ajax execute="@this" render="form" />
+                    </h:commandLink>
+                </li>
+            </ul>
+            
+            <!-- Page Size Selector -->
+            <div class="page-size-selector">
+                <h:outputText value="Items per page:" />
+                <h:selectOneMenu value="#{myBean.pageSize}" 
+                                onchange="document.getElementById('form:pageSizeSubmit').click()">
+                    <f:selectItems value="#{myBean.availablePageSizes}" var="size" 
+                                  itemLabel="#{size}" itemValue="#{size}" />
+                </h:selectOneMenu>
+                <h:commandButton id="pageSizeSubmit" action="#{myBean.onPageSizeChange}" 
+                                style="display:none;">
+                    <f:ajax execute="@form" render="form" />
+                </h:commandButton>
             </div>
         </div>
-    </div>
-
-    <script>
-        //<![CDATA[
-        function showModal(task) {
-            // Set the selected task in a hidden input
-            var modal = document.getElementById('modal');
-            modal.dataset.task = task;
-            modal.style.display = 'block';
-            setTimeout(function() { modal.classList.add('show'); }, 10);
-        }
         
-        function hideModal() {
-            var modal = document.getElementById('modal');
-            modal.classList.remove('show');
-            setTimeout(function() { modal.style.display = 'none'; }, 300);
-        }
-        
-        function deleteTask() {
-            // Get the task from modal data attribute
-            var modal = document.getElementById('modal');
-            var task = modal.dataset.task;
-            
-            // Set the hidden parameter
-            var hiddenButton = document.querySelector('[id$="hiddenDeleteBtn"]');
-            if (hiddenButton) {
-                // Find the parameter input and set its value
-                hiddenButton.setAttribute('data-selected-task', task); // Store the task in a data attribute
-                hiddenButton.click(); // Trigger the hidden button
-            }
-            hideModal();
-        }
-        
-        // Close with Escape key
-        document.addEventListener('keydown', function(e) {
-            if (e.key === 'Escape' && document.getElementById('modal').style.display === 'block') {
-                hideModal();
-            }
-        });
-        //]]>
-    </script>
+        <!-- Page Info -->
+        <div class="page-info">
+            Showing page #{myBean.currentPage} of #{myBean.totalPages} | 
+            Total items: #{myBean.dataList.size()}
+        </div>
+    </h:form>
 </h:body>
 </html>
